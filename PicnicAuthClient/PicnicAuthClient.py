@@ -18,6 +18,8 @@ class PicnicAuthClient(object):
         request_url = self.create_request_url('tokens')
         request = requests.post(request_url, headers=self.authorization_header,
                                 data={'username': username, 'password': password})
+        response = request.json()
+        self.api_key = response['access_token']
 
         return request
 
@@ -35,4 +37,50 @@ class PicnicAuthClient(object):
 
         return request
 
-    
+    def generate_new_secret(self, user_id):
+        request_url = self.create_request_url('AuthUsers/{}/secret'.format(user_id))
+        request = requests.patch(request_url, headers=self.authorization_header)
+
+        return request
+
+    def get_logged_company(self):
+        request_url = self.create_request_url('Companies/Me')
+        request = requests.get(request_url, headers=self.authorization_header)
+
+        return request
+
+    def add_company(self, email, username, password):
+        request_url = self.create_request_url('Companies')
+        request = requests.post(request_url, data={'Email': email, 'UserName': username, 'Password': password,
+                                                   'ConfirmPassword': password})
+
+        return request
+
+    def get_hotp_for_authuser(self, user_id):
+        request_url = self.create_request_url('AuthUsers/{}/hotp'.format(user_id))
+        request = requests.get(request_url, headers=self.authorization_header)
+
+        return request
+
+    def get_totp_for_authuser(self, user_id):
+        request_url = self.create_request_url('AuthUsers/{}/totp'.format(user_id))
+        request = requests.get(request_url, headers=self.authorization_header)
+
+        return request
+
+    def validate_hotp(self, user_id, hotp):
+        request_url = self.create_request_url('AuthUsers/{}/hotp/{}'.format(user_id, hotp))
+        request = requests.get(request_url, headers=self.authorization_header)
+
+        return request
+
+    def validate_totp(self, user_id, totp):
+        request_url = self.create_request_url('AuthUsers/{}/totp/{}'.format(user_id, totp))
+        request = requests.get(request_url, headers=self.authorization_header)
+
+        return request
+
+
+
+
+
