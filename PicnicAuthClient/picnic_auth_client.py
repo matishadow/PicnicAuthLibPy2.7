@@ -17,9 +17,12 @@ class PicnicAuthClient(object):
     def login(self, username, password):
         request_url = self.create_request_url('tokens')
         request = requests.post(request_url, headers=self.authorization_header,
-                                data={'username': username, 'password': password})
+                                data={'grant_type': 'password', 'username': username, 'password': password})
         response = request.json()
         self.api_key = response['access_token']
+        self.authorization_header = {
+            'Authorization': 'Bearer {}'.format(self.api_key)
+        }
 
         return request
 

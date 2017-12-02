@@ -74,3 +74,5 @@ PicnicAuthClient/\.idea/PicnicAuthClient\.iml
 PicnicAuthClient/\.idea/modules\.xml
 
 PicnicAuthClient/\.idea/workspace\.xml
+
+*.pyc
